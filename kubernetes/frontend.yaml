@@ -20,7 +20,7 @@ spec:
         - containerPort: 3000
         env:
         - name: NEXT_PUBLIC_API_URL
-          value: "http://backend-service:8000"
+          value: "http://34.176.123.50"
 ---
 apiVersion: v1
 kind: Service

@@ -11,7 +11,7 @@ load_dotenv()
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",
+    "*"
 ]
 
 app.add_middleware(
@@ -27,7 +27,7 @@ class ScrapeRequest(BaseModel):
     query: str
 
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.5-flash')
 
 @app.get("/")
 def read_root():

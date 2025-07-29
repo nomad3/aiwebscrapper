@@ -25,13 +25,14 @@ export default function Home() {
       });
 
       if (!response.ok) {
-        throw new Error('Something went wrong');
+        const errorData = await response.json();
+        throw new Error(errorData.detail || 'Something went wrong');
       }
 
       const data = await response.json();
       setResult(JSON.stringify(data, null, 2));
-    } catch (error) {
-      setResult('An error occurred. Please check the URL and try again.');
+    } catch (error: any) {
+      setResult(`An error occurred: ${error.message}`);
     } finally {
       setLoading(false);
     }
