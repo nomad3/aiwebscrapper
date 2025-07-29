@@ -1,7 +1,3 @@
-Of course. Here is a good starting point for the prompt we'll use to build your project. I have researched `WebHound` and incorporated some of its concepts into this prompt.
-
-***
-
 ### Project: AI-Powered Web Agent Scraper
 
 **Objective:** To create an MVP of an AI-powered web agent capable of scraping and interpreting web pages based on natural language instructions. The agent will navigate to a given URL, analyze its content, and extract specified information, returning it in a structured format. This project is inspired by tools like WebHound, focusing on the agent's ability to understand user intent and web content.
