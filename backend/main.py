@@ -1,6 +1,12 @@
-from fastapi import FastAPI
+import os
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
+from playwright.async_api import async_playwright
+import google.generativeai as genai
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
@@ -20,11 +26,26 @@ class ScrapeRequest(BaseModel):
     url: str
     query: str
 
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+model = genai.GenerativeModel('gemini-pro')
+
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
 @app.post("/scrape")
-def scrape(request: ScrapeRequest):
-    # Mock response for now
-    return {"url": request.url, "query": request.query, "extracted_data": "This is a mock response."}
+async def scrape(request: ScrapeRequest):
+    try:
+        async with async_playwright() as p:
+            browser = await p.chromium.launch()
+            page = await browser.new_page()
+            await page.goto(request.url)
+            content = await page.content()
+            await browser.close()
+
+        prompt = f"Query: {request.query}\n\nHTML Content:\n{content}"
+        response = model.generate_content(prompt)
+
+        return {"extracted_data": response.text}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
